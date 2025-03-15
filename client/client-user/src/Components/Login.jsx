@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom'
 
 const LandingPage = () => {
 
-    const navigate = useNavigate()
+  //  const navigate = useNavigate()
 
   return (
     <div>
@@ -13,7 +13,7 @@ const LandingPage = () => {
         onSuccess={(credentialResponse) =>{
             console.log(credentialResponse)
             console.log(jwtDecode(credentialResponse.credential))
-            navigate("/home")
+           // navigate("/home")
         }} 
         onError={() => console.log("Login Failed")}
         auto_select={true}
