@@ -1,17 +1,8 @@
-import './App.css'
-import Login from './Components/Login'
-import Home from './Components/Home';
+import './index.css';
+import AppRouter from './routes/AppRouter';
 
 function App() {
-  return (
-    <>
-      <div>
-        <h1>Hello e-cart</h1>
-        <Login />
-
-       </div>
-    </>
-  )
+  return <AppRouter />;
 }
 
-export default App
+export default App;
