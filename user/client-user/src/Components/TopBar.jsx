@@ -1,5 +1,5 @@
 import { FaSearch, FaUserCircle } from "react-icons/fa";
-import CategoriesDropdown from "./AllCateories";
+import CategoriesDropdown from "./AllCateory";
 import Auth from "./Auth";
 import { useState } from "react";
 
@@ -13,16 +13,8 @@ const TopBar = () => {
                 <h1 className="text-2xl font-bold">E-Cart</h1>
 
                 {/* Search Bar with Categories */}
-                <div className="flex items-center bg-white rounded-md overflow-hidden">
+                <div className="flex items-center bg-white rounded-md shadow-md overflow-hidden relative w-[500px]">
                     <CategoriesDropdown />
-                    <input
-                        type="text"
-                        placeholder="Search for products..."
-                        className="px-4 py-2 w-64 border-none focus:outline-none text-black"
-                    />
-                    <button className="px-4 py-2 bg-yellow-500 text-black rounded-r-md hover:bg-yellow-600">
-                        <FaSearch />
-                    </button>
                 </div>
 
                 {/* User Authentication Icon */}
