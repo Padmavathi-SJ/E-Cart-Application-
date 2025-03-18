@@ -1,10 +1,11 @@
 import { FaBars } from "react-icons/fa";
 import TopBar from "../Components/TopBar";
 import CategoryList from "../Components/CategoryList";
-import CategoryHelper from "../utils/CategoryHelper"; // Import helper function
+import CategoryHelper from "../utils/CategoryHelper";
+import SliderBanner from "../Components/SliderBanner";
 
 function Home() {
-    const { sidebarOpen, toggleSidebar } = CategoryHelper(); // Use sidebar state from helper
+    const { sidebarOpen, toggleSidebar } = CategoryHelper();
 
     return (
         <div className="min-h-screen bg-gray-100 flex">
@@ -26,12 +27,16 @@ function Home() {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col items-center">
+                {/* Top Bar */}
                 <TopBar />
-                <div className="p-6">
-                    <h1 className="text-2xl font-bold">Welcome to E-Cart</h1>
-                    <p className="mt-2 text-gray-700">Browse our categories using the sidebar.</p>
+
+                {/* Slider Banner - Centered Below TopBar */}
+                <div className="w-full max-w-screen-xl mt-6">
+                    <SliderBanner />
                 </div>
+
+                
             </div>
         </div>
     );
