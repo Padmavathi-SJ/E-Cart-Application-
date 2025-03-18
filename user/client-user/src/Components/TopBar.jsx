@@ -1,10 +1,11 @@
 import { FaSearch, FaUserCircle } from "react-icons/fa";
-import CategoriesDropdown from "./AllCateory";
 import Auth from "./Auth";
 import { useState } from "react";
 
 const TopBar = () => {
     const [showAuth, setShowAuth] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
 
     return (
         <>
@@ -13,8 +14,21 @@ const TopBar = () => {
                 <h1 className="text-2xl font-bold">E-Cart</h1>
 
                 {/* Search Bar with Categories */}
-                <div className="flex items-center bg-white rounded-md shadow-md overflow-hidden relative w-[500px]">
-                    <CategoriesDropdown />
+                <div className="flex items-center bg-white rounded-md shadow-md overflow-hidden relative w-[500px] max-w-full">
+
+                    {/* Search Input */}
+                    <input
+                        type="text"
+                        placeholder="Search for products..."
+                        className="px-4 py-2 w-full border-l border-gray-300 focus:outline-none text-gray-700"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                    {/* Search Icon */}
+                    <button className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 flex items-center justify-center">
+                        <FaSearch />
+                    </button>
                 </div>
 
                 {/* User Authentication Icon */}
