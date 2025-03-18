@@ -1,21 +1,21 @@
-import db from "../config/db.js";
+import { db } from "../config/db.js";
 
+// Fetch all categories
 export const fetchCategories = async () => {
     try {
-        const [result] = await db.query("SELECT * FROM allcategories");
-        console.log("Categories Query Result:", result); // Debugging
-        return result || []; // Ensure an array is returned
+        const [rows] = await db.query("SELECT * FROM AllCategories ORDER BY added_at DESC");
+        return rows;
     } catch (error) {
         console.error("Error in fetchCategories:", error);
         throw error;
     }
 };
 
+// Fetch all subcategories
 export const fetchSubcategories = async () => {
     try {
-        const [result] = await db.query("SELECT * FROM subcategories");
-        console.log("Subcategories Query Result:", result); // Debugging
-        return result || []; // Ensure an array is returned
+        const [rows] = await db.query("SELECT * FROM subcategories");
+        return rows;
     } catch (error) {
         console.error("Error in fetchSubcategories:", error);
         throw error;

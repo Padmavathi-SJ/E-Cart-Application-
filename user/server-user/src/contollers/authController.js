@@ -1,4 +1,4 @@
-import db from "../config/db.js";
+import {db} from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail } from "../models/userModel.js";

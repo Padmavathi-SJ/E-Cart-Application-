@@ -5,25 +5,27 @@ export const getCategoriesWithSubcategories = async (req, res) => {
         const categories = await fetchCategories();
         const subcategories = await fetchSubcategories();
 
-        // Ensure categories and subcategories are valid arrays
-        if (!Array.isArray(categories) || !Array.isArray(subcategories)) {
-            throw new Error("Database query did not return an array");
-        }
+        // Create a mapping for subcategories grouped by category ID
+        const subcategoryMap = {};
+        subcategories.forEach(sub => {
+            if (!subcategoryMap[sub.c_id]) {
+                subcategoryMap[sub.c_id] = [];
+            }
+            subcategoryMap[sub.c_id].push({
+                sub_id: sub.sub_id,
+                sub_name: sub.sub_name,
+            });
+        });
 
-        const categoriesWithSubcategories = categories.map((category) => ({
-            c_id: category.c_id,
-            c_name: category.c_name,
-            subcategories: subcategories
-                .filter((sub) => sub.c_id === category.c_id)
-                .map((sub) => ({
-                    sub_id: sub.sub_id,
-                    sub_name: sub.sub_name,
-                })),
+        // Attach subcategories to their respective parent category
+        const categoriesWithSubcategories = categories.map(category => ({
+            ...category,
+            subcategories: subcategoryMap[category.c_id] || [], // Default to an empty array if no subcategories
         }));
 
-        res.status(200).json(categoriesWithSubcategories);
+        res.json({ success: true, categories: categoriesWithSubcategories });
     } catch (error) {
         console.error("Error fetching categories:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };

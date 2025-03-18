@@ -1,4 +1,4 @@
-import db from '../config/db.js';
+import {db} from '../config/db.js';
 
 export const createUser = (name, email, password, callback) => {
     const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
