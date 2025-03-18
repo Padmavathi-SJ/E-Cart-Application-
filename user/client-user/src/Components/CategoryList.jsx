@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const CategoryList = () => {
-    const [categories, setCategories] = useState([]); // Ensure it's an empty array
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -10,17 +10,19 @@ const CategoryList = () => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/category/categories");
-                
-                if (Array.isArray(response.data)) {
-                    setCategories(response.data); // Ensure data is an array
+
+                console.log("Fetched Data:", response.data); // Log data in console
+
+                if (response.data && response.data.success && Array.isArray(response.data.categories)) {
+                    setCategories(response.data.categories);
                 } else {
                     console.error("Invalid data format:", response.data);
-                    setCategories([]); // Fallback to empty array
+                    setCategories([]);
                 }
             } catch (error) {
                 console.error("Error fetching categories:", error);
                 setError("Failed to load categories.");
-                setCategories([]); // Prevents map error
+                setCategories([]);
             } finally {
                 setLoading(false);
             }
@@ -45,7 +47,7 @@ const CategoryList = () => {
                                     <span className="text-sm text-gray-500 group-open:rotate-180">▼</span>
                                 </summary>
                                 <ul className="mt-2 ml-4 space-y-1">
-                                    {Array.isArray(category.subcategories) ? (
+                                    {category.subcategories.length > 0 ? (
                                         category.subcategories.map((sub) => (
                                             <li key={sub.sub_id} className="text-sm text-gray-700 hover:text-blue-500 cursor-pointer">
                                                 {sub.sub_name}
