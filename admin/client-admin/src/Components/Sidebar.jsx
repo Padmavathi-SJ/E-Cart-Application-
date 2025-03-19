@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AddCategory from "../utils/AddCategory";
 import AddSubcategory from "../utils/AddSubcategory";
 
-const Sidebar = () => {
+const Sidebar = ({ setSelectedSubId }) => {
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [showAddSubcategory, setShowAddSubcategory] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -47,9 +47,15 @@ const Sidebar = () => {
         }
     };
 
+    const handleSubcategoryClick = (sub_id) => {
+        console.log("Selected subcategory ID:", sub_id); // Debugging
+        setSelectedSubId(sub_id);
+    };
+    
     return (
         <div className="w-64 bg-white text-gray-800 h-screen p-4 shadow-md">
             <nav className="space-y-3">
+                {/* Category Header with Add Button */}
                 <div className="relative flex items-center gap-2 cursor-pointer">
                     <span className="font-medium">All Categories</span>
                     <span
@@ -60,10 +66,12 @@ const Sidebar = () => {
                     </span>
                 </div>
 
+                {/* Categories List */}
                 {categories.length > 0 && (
                     <div className="mt-2">
                         {categories.map((cat) => (
                             <div key={cat.c_id} className="px-2 py-1">
+                                {/* Category Row */}
                                 <div
                                     className="flex justify-between items-center hover:bg-gray-100 cursor-pointer"
                                     onClick={() => toggleSubcategories(cat.c_id)}
@@ -83,21 +91,19 @@ const Sidebar = () => {
                                     </div>
                                 </div>
 
+                                {/* Subcategories List */}
                                 {expandedCategory === cat.c_id && subcategories[cat.c_id] && (
                                     <ul className="pl-4 mt-1 text-gray-700">
                                         {subcategories[cat.c_id].length > 0 ? (
                                             subcategories[cat.c_id].map((sub) => (
                                                 <li
-                                                key={sub.sub_id}
-                                                className="flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => navigate(`/manage-products/${sub.sub_id}`)} 
-                                            >
-                                                <span>{sub.sub_name}</span>
-                                                <span className="text-gray-500">{">"}</span>
-                                            </li>
-                                            
-                                            
-                                            
+                                                    key={sub.sub_id}
+                                                    className="flex justify-between items-center px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                                                    onClick={() => handleSubcategoryClick(sub.sub_id)}
+                                                >
+                                                    <span>{sub.sub_name}</span>
+                                                    <span className="text-gray-500">{">"}</span>
+                                                </li>
                                             ))
                                         ) : (
                                             <li className="text-gray-500">No subcategories</li>
@@ -109,10 +115,12 @@ const Sidebar = () => {
                     </div>
                 )}
 
+                {/* Other Sidebar Items */}
                 <p className="cursor-pointer hover:text-blue-600">Orders</p>
                 <p className="cursor-pointer hover:text-blue-600">Users</p>
             </nav>
 
+            {/* Add Category Modal */}
             {showAddCategory && (
                 <div className="absolute left-64 top-10 w-80 p-4 bg-white border border-gray-300 shadow-md rounded-md">
                     <AddCategory
@@ -125,6 +133,7 @@ const Sidebar = () => {
                 </div>
             )}
 
+            {/* Add Subcategory Modal */}
             {showAddSubcategory && (
                 <div className="absolute left-64 top-20 w-80 p-4 bg-white border border-gray-300 shadow-md rounded-md">
                     <AddSubcategory

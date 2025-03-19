@@ -1,20 +1,23 @@
-import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import TopBar from "../Components/TopBar";
 import Sidebar from "../Components/Sidebar";
 import ManageProduct from "../Components/ManageProduct";
 
 const Home = () => {
+    const [selectedSubId, setSelectedSubId] = useState(null);
+
+    useEffect(() => {
+        console.log("Updated selectedSubId:", selectedSubId);
+    }, [selectedSubId]);
+    
     return (
         <div className="flex">
-            <Sidebar />  
+            <Sidebar setSelectedSubId={setSelectedSubId} />
             <div className="w-full">
                 <TopBar />
-                <div className="p-6">
-                    <Routes>
-                        <Route path="/" element={<h2 className="text-center mt-10 text-2xl">Welcome to Admin Dashboard</h2>} />
-                        <Route path="manage-products/:sub_id" element={<ManageProduct />} /> 
-                    </Routes>
-                </div>
+            <div className="flex-1 p-4">
+                {selectedSubId ? <ManageProduct sub_id={selectedSubId} /> : <p>Select a subcategory to manage products.</p>}
+            </div>
             </div>
         </div>
     );
