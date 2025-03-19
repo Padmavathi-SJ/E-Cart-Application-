@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./src/routes/authRoutes.js";
 import AllCategoryRoutes from './src/routes/AllCategories.js';
+import AddProductRoutes from './src/routes/AddProductRouter.js';
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/admin", authRoutes);
 app.use("/admin", AllCategoryRoutes);
+app.use("/admin", AddProductRoutes);
 
 const PORT = process.env.ADMIN_PORT || 5001; // Change the port to 5001
 

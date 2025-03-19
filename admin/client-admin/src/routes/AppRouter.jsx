@@ -6,7 +6,7 @@ const AppRouter = () => {
     return (
        
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/*" element={<Home />} />  {/* ✅ Fix for nested routing */}
                 <Route path="/login" element={<Auth />} />
             </Routes>
         
