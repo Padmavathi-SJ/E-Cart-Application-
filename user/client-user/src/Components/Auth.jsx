@@ -23,7 +23,7 @@ function Auth() {
                 const { data } = await axios.post("http://localhost:5000/auth/login", { email, password });
                 alert(data.message);
                 localStorage.setItem("token", data.token);
-                navigate("/"); // Navigate to Home
+               
             } else {
                 const { data } = await axios.post("http://localhost:5000/auth/register", { name, email, password });
                 alert(data.message);
