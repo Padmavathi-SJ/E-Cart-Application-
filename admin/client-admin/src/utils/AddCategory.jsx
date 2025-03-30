@@ -15,19 +15,21 @@ const AddCategory = ({ onCategoryAdded, onClose }) => {
             const { data } = await axios.post("http://localhost:5001/admin/categories", { c_name: newCategory });
             
             if (data.success) {
-                alert("Category added!");
+                window.alert("Category added successfully!");
                 setNewCategory("");
-                onCategoryAdded();
+                onCategoryAdded(); // Refresh categories
+                onClose(); // Close the modal
             } else {
                 alert("Failed to add category");
             }
         } catch (error) {
             console.error("Error adding category:", error);
+            alert("Something went wrong. Please try again.");
         }
     };
 
     return (
-        <div>
+        <div className="relative bg-white p-6 rounded-lg shadow-lg w-96">
             <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
                 <AiOutlineClose size={20} />
             </button>
