@@ -42,7 +42,7 @@ const AddSubProduct = ({ onSubProductAdded, products }) => {
     const handleAddSubProduct = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("/api/add-sub-product", { p_id, sub_p_name });
+            const res = await axios.post("http://localhost:5001/admin/add-sub-product", { p_id, sub_p_name });
             alert(res.data.message); // Success alert
             setSubPName("");
             if (onSubProductAdded) onSubProductAdded();
