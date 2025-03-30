@@ -1,6 +1,5 @@
 import { 
     getAllCategories, 
-    getAllCategoriesWithSubcategories, 
     getSubcategoriesByCategoryId, 
     addCategory, 
     addSubcategory 
@@ -17,27 +16,25 @@ export const fetchCategories = async (req, res) => {
     }
 };
 
-// Fetch all categories with their subcategories
-export const fetchCategoriesWithSubcategories = (req, res) => {
-    getAllCategoriesWithSubcategories((err, categories) => {
-        if (err) return res.status(500).json({ success: false, message: "Database error" });
-        res.json({ success: true, categories });
-    });
-};
+
 
 // Fetch subcategories based on category ID
 export const fetchSubcategoriesByCategoryId = async (req, res) => {
     const { c_id } = req.params;
+ //   console.log("API Hit: Fetching subcategories for category ID:", c_id); // Debugging
+
     if (!c_id) return res.status(400).json({ success: false, message: "Category ID required" });
 
     try {
         const subcategories = await getSubcategoriesByCategoryId(c_id);
+      //  console.log("Subcategories from DB:", subcategories);  // Check if DB returns data
         res.json({ success: true, subcategories });
     } catch (err) {
         console.error("Database error:", err);
         res.status(500).json({ success: false, message: "Database error" });
     }
 };
+
 
 
 // Create a new category

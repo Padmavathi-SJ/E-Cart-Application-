@@ -1,39 +1,5 @@
 import db from "../config/db.js";
 
-// Fetch all categories with their subcategories
-export const getAllCategoriesWithSubcategories = async () => {
-    const sql = `
-        SELECT c.c_id, c.c_name, s.sub_id, s.sub_name 
-        FROM AllCategories c
-        LEFT JOIN Subcategories s ON c.c_id = s.c_id
-        ORDER BY c.added_at DESC, s.added_at DESC
-    `;
-    
-    try {
-        const [result] = await db.query(sql);
-        const categoriesMap = {};
-        
-        result.forEach((row) => {
-            if (!categoriesMap[row.c_id]) {
-                categoriesMap[row.c_id] = {
-                    c_id: row.c_id,
-                    c_name: row.c_name,
-                    subcategories: [],
-                };
-            }
-            if (row.sub_id) {
-                categoriesMap[row.c_id].subcategories.push({
-                    sub_id: row.sub_id,
-                    sub_name: row.sub_name,
-                });
-            }
-        });
-        
-        return Object.values(categoriesMap);
-    } catch (err) {
-        throw err;
-    }
-};
 
 // Fetch subcategories based on c_id
 export const getSubcategoriesByCategoryId = async (c_id) => {
