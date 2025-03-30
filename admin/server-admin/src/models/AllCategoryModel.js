@@ -40,12 +40,14 @@ export const getSubcategoriesByCategoryId = async (c_id) => {
     const sql = "SELECT sub_id, sub_name FROM Subcategories WHERE c_id = ?";
     try {
         const [result] = await db.query(sql, [c_id]);
+      //  console.log("Subcategories from DB:", result);  // Debugging
         return result;
     } catch (err) {
-        console.error("Error fetching subcategories:", err);
+       // console.error("Error fetching subcategories:", err);
         throw err;
     }
 };
+
 
 // Fetch all categories (without subcategories)
 export const getAllCategories = async () => {
