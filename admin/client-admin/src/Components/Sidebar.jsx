@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp, PlusCircle } from "lucide-react";
-import AddSubcategory from "../utils/AddSubcategory"; // Import the AddSubcategory component
-import AddCategory from "../utils/AddCategory"; // Import the AddCategory component
+import AddSubcategory from "../utils/AddSubcategory";
+import AddCategory from "../utils/AddCategory";
+import { AddProduct } from "../utils/ProductHelper"; // Import AddProduct component
 
 const Sidebar = () => {
     const [showCategories, setShowCategories] = useState(false);
@@ -12,6 +13,7 @@ const Sidebar = () => {
     const [showAddSubcategory, setShowAddSubcategory] = useState(false);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [showAddCategory, setShowAddCategory] = useState(false);
+    const [showAddProduct, setShowAddProduct] = useState(false); // New state for AddProduct modal
 
     useEffect(() => {
         fetchCategories();
@@ -70,7 +72,18 @@ const Sidebar = () => {
                             <PlusCircle size={20} />
                         </button>
                     </div>
-                    <p className="cursor-pointer hover:text-blue-600">Orders</p>
+                    
+                    {/* Product Categories with AddProduct Icon */}
+                    <div className="flex items-center justify-between">
+                        <p className="cursor-pointer hover:text-blue-600">Product Categories</p>
+                        <button 
+                            className="text-green-600 hover:text-green-800"
+                            onClick={() => setShowAddProduct(true)} // Show AddProduct modal
+                        >
+                            <PlusCircle size={20} />
+                        </button>
+                    </div>
+                    
                     <p className="cursor-pointer hover:text-blue-600">Contact</p>
                 </nav>
             </div>
@@ -102,7 +115,7 @@ const Sidebar = () => {
                                         </button>
                                     </div>
 
-                                    {/* Display Subcategories Below the Category */}
+                                    {/* Display Subcategories */}
                                     {expandedCategory === cat.c_id && (
                                         <ul className="mt-2 pl-4 list-disc text-gray-700 bg-gray-100 p-2 rounded-md shadow-md">
                                             {subcategories[cat.c_id] && subcategories[cat.c_id].length > 0 ? (
@@ -149,6 +162,19 @@ const Sidebar = () => {
                                 setShowAddCategory(false);
                             }}
                             onClose={() => setShowAddCategory(false)}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* AddProduct Modal */}
+            {showAddProduct && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-md shadow-lg relative w-96">
+                        <AddProduct
+                            onProductAdded={() => {
+                                setShowAddProduct(false);
+                            }}
                         />
                     </div>
                 </div>
