@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ViewSubcategories = () => {
     const [categories, setCategories] = useState([]);
@@ -11,9 +12,8 @@ const ViewSubcategories = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch("http://localhost:5001/admin/categories");
-            const data = await response.json();
-            setCategories(data.categories || []);
+            const response = await axios.get("http://localhost:5001/admin/categories");
+            setCategories(response.data.categories || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
@@ -21,9 +21,8 @@ const ViewSubcategories = () => {
 
     const fetchSubcategories = async (c_id) => {
         try {
-            const response = await fetch(`http://localhost:5001/admin/categories/${c_id}/subcategories`);
-            const data = await response.json();
-            setSubcategories((prev) => ({ ...prev, [c_id]: data.subcategories || [] }));
+            const response = await axios.get(`http://localhost:5001/admin/categories/${c_id}/subcategories`);
+            setSubcategories((prev) => ({ ...prev, [c_id]: response.data.subcategories || [] }));
         } catch (error) {
             console.error("Error fetching subcategories:", error);
         }
@@ -31,7 +30,7 @@ const ViewSubcategories = () => {
 
     const handleCategoryClick = (c_id) => {
         if (expandedCategory === c_id) {
-            setExpandedCategory(null); // Collapse if already expanded
+            setExpandedCategory(null);
         } else {
             setExpandedCategory(c_id);
             if (!subcategories[c_id]) {
@@ -54,7 +53,6 @@ const ViewSubcategories = () => {
                                 {cat.c_name}
                             </span>
 
-                            {/* Subcategories Box (Visible on Click) */}
                             {expandedCategory === cat.c_id && (
                                 <ul className="mt-2 pl-6 list-disc text-gray-700 bg-gray-100 p-2 rounded-md shadow-md">
                                     {subcategories[cat.c_id] && subcategories[cat.c_id].length > 0 ? (

@@ -1,5 +1,5 @@
-// src/components/ViewCategories.jsx
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ViewCategories = () => {
     const [categories, setCategories] = useState([]);
@@ -10,13 +10,14 @@ const ViewCategories = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch("http://localhost:5001/admin/categories");
-            const data = await response.json();
-            setCategories(data.categories || []);
+            const response = await axios.get("http://localhost:5001/admin/categories");
+            console.log("Fetched categories:", response.data); // Debug log
+            setCategories(response.data.categories || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
     };
+    
 
     return (
         <div className="mt-2">

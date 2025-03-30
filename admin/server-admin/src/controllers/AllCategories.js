@@ -7,11 +7,14 @@ import {
 } from "../models/AllCategoryModel.js";
 
 // Fetch all categories (without subcategories)
-export const fetchCategories = (req, res) => {
-    getAllCategories((err, categories) => {
-        if (err) return res.status(500).json({ success: false, message: "Database error" });
+export const fetchCategories = async (req, res) => {
+    try {
+        const categories = await getAllCategories();
         res.json({ success: true, categories });
-    });
+    } catch (err) {
+        console.error("Database error:", err);
+        res.status(500).json({ success: false, message: "Database error" });
+    }
 };
 
 // Fetch all categories with their subcategories
@@ -23,15 +26,19 @@ export const fetchCategoriesWithSubcategories = (req, res) => {
 };
 
 // Fetch subcategories based on category ID
-export const fetchSubcategoriesByCategoryId = (req, res) => {
+export const fetchSubcategoriesByCategoryId = async (req, res) => {
     const { c_id } = req.params;
     if (!c_id) return res.status(400).json({ success: false, message: "Category ID required" });
 
-    getSubcategoriesByCategoryId(c_id, (err, subcategories) => {
-        if (err) return res.status(500).json({ success: false, message: "Database error" });
+    try {
+        const subcategories = await getSubcategoriesByCategoryId(c_id);
         res.json({ success: true, subcategories });
-    });
+    } catch (err) {
+        console.error("Database error:", err);
+        res.status(500).json({ success: false, message: "Database error" });
+    }
 };
+
 
 // Create a new category
 export const createCategory = (req, res) => {

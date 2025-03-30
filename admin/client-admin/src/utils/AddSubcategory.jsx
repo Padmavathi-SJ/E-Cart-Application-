@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import axios from "axios";
 
 const AddSubcategory = ({ categoryId, onSubcategoryAdded, onClose }) => {
     const [newSubcategory, setNewSubcategory] = useState("");
@@ -11,14 +12,12 @@ const AddSubcategory = ({ categoryId, onSubcategoryAdded, onClose }) => {
         }
 
         try {
-            const response = await fetch("http://localhost:5001/admin/subcategories", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ c_id: categoryId, sub_name: newSubcategory }),
+            const response = await axios.post("http://localhost:5001/admin/subcategories", {
+                c_id: categoryId,
+                sub_name: newSubcategory
             });
 
-            const data = await response.json();
-            if (data.success) {
+            if (response.data.success) {
                 alert("Subcategory added!");
                 setNewSubcategory("");
                 onSubcategoryAdded();

@@ -1,16 +1,16 @@
 import db from "../config/db.js";
 
 // Add a new product
-export const addProduct = (productData, callback) => {
+export const addProduct = async (productData) => {
     const { product_name, description, price, stock, brand, sub_id } = productData;
-
     const sql = `
         INSERT INTO products (product_name, description, price, stock, brand, sub_id)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
-
-    db.query(sql, [product_name, description, price, stock, brand, sub_id], (err, result) => {
-        if (err) return callback(err, null);
-        callback(null, { success: true, message: "Product added successfully", product_id: result.insertId });
-    });
+    try {
+        const [result] = await db.query(sql, [product_name, description, price, stock, brand, sub_id]);
+        return { success: true, message: "Product added successfully", product_id: result.insertId };
+    } catch (err) {
+        throw err;
+    }
 };

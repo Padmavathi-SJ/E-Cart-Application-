@@ -12,7 +12,7 @@ const Home = () => {
     
     return (
         <div className="flex">
-            <Sidebar setSelectedSubId={setSelectedSubId} />
+            <Sidebar/>
             <div className="w-full">
                 <TopBar />
             <div className="flex-1 p-4">

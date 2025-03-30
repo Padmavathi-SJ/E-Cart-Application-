@@ -1,9 +1,12 @@
 import db from "../config/db.js";
 
-export const findAdminByEmail = (email, callback) => {
+// Find admin by email
+export const findAdminByEmail = async (email) => {
     const sql = "SELECT * FROM admin WHERE email = ?";
-    db.query(sql, [email], (err, result) => {
-        if (err) return callback(err, null);
-        callback(null, result[0]);
-    });
+    try {
+        const [result] = await db.query(sql, [email]);
+        return result[0] || null;
+    } catch (err) {
+        throw err;
+    }
 };

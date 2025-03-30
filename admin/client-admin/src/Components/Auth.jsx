@@ -1,24 +1,26 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios
 
 const Auth = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch("http://localhost:5001/admin/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-        });
-
-        const data = await res.json();
-        if (data.success) {
-            alert("Login successful!");
-            navigate("/"); // Redirect to Home Page after login
-        } else {
-            alert(data.message);
+        try {
+            const res = await axios.post("http://localhost:5001/admin/login", formData, {
+                headers: { "Content-Type": "application/json" },
+            });
+            
+            if (res.data.success) {
+                alert("Login successful!");
+                navigate("/"); // Redirect to Home Page after login
+            } else {
+                alert(res.data.message);
+            }
+        } catch (error) {
+            alert(error.response?.data?.message || "An error occurred");
         }
     };
 

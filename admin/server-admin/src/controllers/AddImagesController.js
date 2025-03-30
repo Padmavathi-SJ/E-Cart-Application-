@@ -1,20 +1,32 @@
 import { getProductsBySubcategory, addProductImage } from "../models/AddImagesModel.js";
 
+
 export const fetchProductsBySubcategory = async (req, res) => {
     try {
         const { sub_id } = req.params;
-        const products = await getProductsBySubcategory(sub_id);
-        res.json(products);
+
+        if (!sub_id) {
+            return res.status(400).json({ error: "Subcategory ID is required" });
+        }
+
+        const productNames = await getProductsBySubcategory(sub_id);
+
+        console.log("Fetched product names:", productNames);
+
+        res.json(productNames.length ? productNames : []);
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch products" });
+        console.error("❌ Error fetching products:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+
 
 // Upload product image
 export const uploadImage = async (req, res) => {
     try {
         const { product_id } = req.body;
-        const image_url = req.file.path; // Assuming you're using Multer for file uploads
+        const image_url = req.file.path; 
 
         await addProductImage(product_id, image_url);
         res.status(201).json({ message: "Image uploaded successfully!" });

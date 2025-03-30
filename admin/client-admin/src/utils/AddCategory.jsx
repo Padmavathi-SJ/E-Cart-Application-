@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AiOutlineClose } from "react-icons/ai"; // Importing close icon from React Icons
+import { AiOutlineClose } from "react-icons/ai";
+import axios from "axios";
 
 const AddCategory = ({ onCategoryAdded, onClose }) => {
     const [newCategory, setNewCategory] = useState("");
@@ -11,17 +12,12 @@ const AddCategory = ({ onCategoryAdded, onClose }) => {
         }
 
         try {
-            const response = await fetch("http://localhost:5001/admin/categories", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ c_name: newCategory }),
-            });
-
-            const data = await response.json();
+            const { data } = await axios.post("http://localhost:5001/admin/categories", { c_name: newCategory });
+            
             if (data.success) {
                 alert("Category added!");
                 setNewCategory("");
-                onCategoryAdded(); // Refresh category list and close form
+                onCategoryAdded();
             } else {
                 alert("Failed to add category");
             }
@@ -32,14 +28,9 @@ const AddCategory = ({ onCategoryAdded, onClose }) => {
 
     return (
         <div>
-            {/* Close Button */}
-            <button 
-                onClick={onClose} 
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-            >
+            <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
                 <AiOutlineClose size={20} />
             </button>
-
             <h2 className="text-lg font-bold mb-4">Add New Category</h2>
             <input
                 type="text"
