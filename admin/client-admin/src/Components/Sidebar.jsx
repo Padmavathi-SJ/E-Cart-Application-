@@ -4,7 +4,7 @@ import CategoriesSection from "./Categories";
 import ProductCategoriesSection from "./ProductCategories";
 import Modals from "./Modals";
 
-const Sidebar = () => {
+const Sidebar = ({setActiveSection}) => {
     const [showCategories, setShowCategories] = useState(false);
     const [showProductCategories, setShowProductCategories] = useState(false);
     const [showAddCategory, setShowAddCategory] = useState(false);
@@ -67,8 +67,11 @@ const Sidebar = () => {
                             setSelectedProductCategoryId={setSelectedProductCategoryId}
                         />
                     )}
+                    
+                    <p className="cursor-pointer hover:text-blue-600" onClick={() => setActiveSection("addItem")}>
+                        Add Item
+                    </p>
 
-                    <p className="cursor-pointer hover:text-blue-600">Contact</p>
                 </nav>
             </div>
 

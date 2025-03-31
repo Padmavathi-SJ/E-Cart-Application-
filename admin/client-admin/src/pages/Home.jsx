@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TopBar from "../Components/TopBar";
 import Sidebar from "../Components/Sidebar";
-
+import AddItem from "../Components/AddItem";
 
 const Home = () => {
-    const [selectedSubId, setSelectedSubId] = useState(null);
+    const [activeSection, setActiveSection] = useState(null);
 
-    useEffect(() => {
-        console.log("Updated selectedSubId:", selectedSubId);
-    }, [selectedSubId]);
-    
     return (
         <div className="flex">
-            <Sidebar/>
+            <Sidebar setActiveSection={setActiveSection} />
             <div className="w-full">
                 <TopBar />
+                <div className="p-4">
+                    {activeSection === "addItem" && <AddItem />}
+                </div>
             </div>
         </div>
     );
