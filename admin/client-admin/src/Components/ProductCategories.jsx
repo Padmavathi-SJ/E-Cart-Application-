@@ -34,10 +34,6 @@ const ProductCategories = () => {
 
     return (
         <div className="absolute left-64 top-0 w-80 bg-white p-4 shadow-md border border-gray-300">
-            <button onClick={() => setShowAddProduct(true)} className="bg-blue-500 text-white px-4 py-2 rounded mb-2">
-                Add Product
-            </button>
-            {showAddProduct && <AddProduct onProductAdded={fetchProducts} />}
 
             <ul>
     {products.length > 0 ? (
