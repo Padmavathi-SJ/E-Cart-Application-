@@ -15,10 +15,13 @@ app.use(express.json());
 // ✅ Get absolute path for the "uploads" directory (outside project)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadsPath = path.join(__dirname, "../../uploads");
+
 
 // ✅ Serve static files (Ensure images are accessible)
-app.use("/uploads", express.static(uploadsPath));
+app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
+
+
+
 
 app.use("/auth", authRoutes);
 app.use("/category", categoryRoutes);

@@ -10,10 +10,12 @@ export const fetchItemsBySubCategoryId = async (req, res) => {
     try {
         const items = await getItemsBySubCategoryId(sub_id);
 
-        // ✅ Ensure the full URL for images is provided in the response
+        // ✅ Fix: Ensure `image_url` does not get duplicated
         const updatedItems = items.map(item => ({
             ...item,
-            image_url: item.image_url ? `http://localhost:5000${item.image_url}` : null
+            image_url: item.image_url?.startsWith("http") 
+                ? item.image_url.replace(/['"]+/g, '')  // Remove any unwanted quotes
+                : `http://localhost:5001/uploads/${item.image_url.replace(/['"]+/g, '')}`
         }));
 
         res.json({ success: true, items: updatedItems });
@@ -22,3 +24,4 @@ export const fetchItemsBySubCategoryId = async (req, res) => {
         res.status(500).json({ success: false, message: "Database error" });
     }
 };
+
