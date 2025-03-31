@@ -10,13 +10,12 @@ const ItemsDisplay = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-             //   console.log("Fetching items for sub_id:", sub_id);  // Add debug log
                 const response = await fetch(`http://localhost:5000/items/subcategories/${sub_id}/items`);
                 const data = await response.json();
-                
-               // console.log("API Response:", data);  // Log API response ✅
-    
+                console.log("API Response:", data);  // ✅ Debug log
+        
                 if (data.success) {
+                    console.log("Fetched Items:", data.items);  // ✅ Log items list
                     setItems(data.items);
                 } else {
                     setError("No items found for this subcategory.");
@@ -27,7 +26,7 @@ const ItemsDisplay = () => {
             } finally {
                 setLoading(false);
             }
-        };
+        };        
     
         fetchItems();
     }, [sub_id]);
@@ -45,7 +44,7 @@ const ItemsDisplay = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {items.map((item) => (
                         <div key={item.item_id} className="bg-white shadow-md rounded-lg p-4">
-                           <img src={`http://localhost:5000${item.image_url}`} alt={item.item_name} className="w-full h-40 object-cover rounded-md" />
+                        <img src={item.image_url} alt={item.item_name} className="w-full h-40 object-cover rounded-md" />
                             <h3 className="text-lg font-semibold mt-2">{item.item_name}</h3>
                             <p className="text-sm text-gray-500">{item.item_description}</p>
                             <p className="font-semibold text-green-600 mt-2">₹{item.price}</p>
