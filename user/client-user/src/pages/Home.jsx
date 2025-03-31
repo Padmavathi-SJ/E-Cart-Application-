@@ -3,6 +3,7 @@ import TopBar from "../Components/TopBar";
 import CategoryList from "../Components/CategoryList";
 import CategoryHelper from "../utils/CategoryHelper";
 import SliderBanner from "../Components/SliderBanner";
+import ProductCategoryList from '../Components/ProductCategoriesList';
 
 function Home() {
     const { sidebarOpen, toggleSidebar } = CategoryHelper();
@@ -34,6 +35,11 @@ function Home() {
                 {/* Slider Banner - Centered Below TopBar */}
                 <div className="w-full max-w-screen-xl mt-6">
                     <SliderBanner />
+                </div>
+
+                {/* Product Categories List - Left Aligned Below SliderBanner */}
+                <div className="w-full max-w-screen-xl mt-8 ml-10">
+                    <ProductCategoryList />
                 </div>
 
                 
