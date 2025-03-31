@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -49,7 +51,11 @@ const CategoryList = () => {
                                 <ul className="mt-2 ml-4 space-y-1">
                                     {category.subcategories.length > 0 ? (
                                         category.subcategories.map((sub) => (
-                                            <li key={sub.sub_id} className="text-sm text-gray-700 hover:text-blue-500 cursor-pointer">
+                                            <li 
+                                                key={sub.sub_id} 
+                                                className="text-sm text-gray-700 hover:text-blue-500 cursor-pointer"
+                                                onClick={() => navigate(`/subcategories/${sub.sub_id}/items`)}
+                                            >
                                                 {sub.sub_name}
                                             </li>
                                         ))
