@@ -50,7 +50,7 @@ export const fetchSubProductCategoriesByProductId = async (req, res) => {
         const subProducts = await getSubProductCategoriesByProductId(p_id);
         res.json({ success: true, subProducts });
     } catch (err) {
-        console.error("Database error:", err);
+       // console.error("Database error:", err);
         res.status(500).json({ success: false, message: "Database error" });
     }
 };

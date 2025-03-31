@@ -26,10 +26,10 @@ export const getAllProducts = async () => {
     const sql = "SELECT * FROM ProductCategories ORDER BY added_at DESC";
     try {
         const [rows] = await db.query(sql);
-        console.log("Database Query Result:", rows); // Debugging log
+       // console.log("Database Query Result:", rows); // Debugging log
         return rows;
     } catch (err) {
-        console.error("Database Query Error:", err);
+      //  console.error("Database Query Error:", err);
         throw err;
     }
 };
