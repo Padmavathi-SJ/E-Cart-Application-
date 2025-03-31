@@ -8,7 +8,7 @@ import AllCategoryRoutes from './src/routes/AllCategories.js';
 import ProductRoutes from './src/routes/ProductRouter.js';
 import ItemsRoutes from './src/routes/ItemsRouter.js';
 import { fileURLToPath } from "url";
-import morgan from 'morgan';
+
 
 dotenv.config();
 const app = express();
@@ -20,10 +20,10 @@ app.use(cors({origin: "*"}));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded bodies
 app.use(bodyParser.json());
-app.use(morgan("dev"));
+
 
 // Serve images from the uploads directory
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../../uploads"))); 
 
 
 app.use("/admin", authRoutes);
