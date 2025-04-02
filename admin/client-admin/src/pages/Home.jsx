@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TopBar from "../Components/TopBar";
 import Sidebar from "../Components/Sidebar";
-import AddItem from "../Components/AddItem";
+import AddCategoryItem from "../Components/AddCategoryItem";
 
 const Home = () => {
     const [activeSection, setActiveSection] = useState(null);
@@ -12,7 +12,7 @@ const Home = () => {
             <div className="w-full">
                 <TopBar />
                 <div className="p-4">
-                    {activeSection === "addItem" && <AddItem />}
+                    {activeSection === "addItem" && <AddCategoryItem />}
                 </div>
             </div>
         </div>

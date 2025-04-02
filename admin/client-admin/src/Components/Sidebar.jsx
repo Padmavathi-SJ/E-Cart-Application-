@@ -69,7 +69,7 @@ const Sidebar = ({setActiveSection}) => {
                     )}
                     
                     <p className="cursor-pointer hover:text-blue-600" onClick={() => setActiveSection("addItem")}>
-                        Add Item
+                        Add Category Item
                     </p>
 
                 </nav>
