@@ -8,6 +8,7 @@ import AllCategoryRoutes from './src/routes/AllCategories.js';
 import ProductRoutes from './src/routes/ProductRouter.js';
 import ItemsRoutes from './src/routes/ItemsRouter.js';
 import { fileURLToPath } from "url";
+import  addProductIetm  from "./src/routes/ProductItemRouter.js";
 
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use("/admin", authRoutes);
 app.use("/admin", AllCategoryRoutes);
 app.use("/admin", ProductRoutes);
 app.use("/admin", ItemsRoutes);
+app.use('/admin', addProductIetm);
 
 const PORT = process.env.ADMIN_PORT || 5001; // Change the port to 5001
 
