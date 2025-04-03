@@ -3,8 +3,6 @@ import { fetchAllProducts,  fetchSubProductCategoriesByProductId} from "../conto
 
 const router = express.Router();
 
-
-
 router.get("/product-categories", fetchAllProducts);
 router.get("/product-categories/:p_id/sub-products", fetchSubProductCategoriesByProductId);
 

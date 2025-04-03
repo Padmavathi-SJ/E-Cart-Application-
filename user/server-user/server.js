@@ -7,6 +7,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import categoryRoutes from './src/routes/categoryRoutes.js';
 import ProductRoutes from './src/routes/ProductRoutes.js';
 import ItemsRoutes from './src/routes/ItemsRouter.js';
+import ProductItemsRoutes from './src/routes/ProductDisplayRouter.js';
 
 const app = express();
 app.use(cors());
@@ -27,5 +28,6 @@ app.use("/auth", authRoutes);
 app.use("/category", categoryRoutes);
 app.use('/products', ProductRoutes);
 app.use('/items', ItemsRoutes);
+app.use('/produtItems', ProductItemsRoutes);
 
 app.listen(5000, () => console.log("✅ Server running on port 5000"));
