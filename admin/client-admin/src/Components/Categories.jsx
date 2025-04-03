@@ -11,6 +11,7 @@ const Categories = ({ setShowAddSubcategory, setSelectedCategoryId }) => {
         fetchCategories();
     }, []);
 
+    
     const fetchCategories = async () => {
         try {
             const response = await axios.get("http://localhost:5001/admin/categories");

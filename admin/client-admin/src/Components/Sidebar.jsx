@@ -71,6 +71,9 @@ const Sidebar = ({setActiveSection}) => {
                     <p className="cursor-pointer hover:text-blue-600" onClick={() => setActiveSection("addItem")}>
                         Add Category Item
                     </p>
+                    <p className="cursor-pointer hover:text-blue-600" onClick={() => setActiveSection("addProductItem")}>
+                        Add Product Item
+                    </p>
 
                 </nav>
             </div>
