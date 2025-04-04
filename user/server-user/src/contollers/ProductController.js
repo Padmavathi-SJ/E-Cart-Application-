@@ -1,14 +1,14 @@
 import { getItemsBySubProductCategoryId } from '../models/ProductItemsModel.js';
 
 export const fetchItemsBySubProductCategoryId = async (req, res) => {
-    const { sub_id } = req.params;
+    const { sub_p_id } = req.params;
 
-    if (!sub_id) {
+    if (!sub_p_id) {
         return res.status(400).json({ success: false, message: "Subcategory ID is required" });
     }
 
     try {
-        const items = await getItemsBySubProductCategoryId(sub_id);
+        const items = await getItemsBySubProductCategoryId(sub_p_id);
 
         // ✅ Fix: Ensure `image_url` does not get duplicated
         const updatedItems = items.map(item => ({

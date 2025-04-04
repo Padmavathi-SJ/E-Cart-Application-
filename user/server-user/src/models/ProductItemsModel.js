@@ -5,7 +5,6 @@ export const getItemsBySubProductCategoryId = async(sub_p_id) => {
     SELECT item_id, item_name, item_description, special_content, price, stock_quantity, image_url
     FROM product_items
     WHERE sub_p_id = ?
-    ORDER BY sub_p_id = ?
     ORDER BY added_at DESC;
     `;
 
