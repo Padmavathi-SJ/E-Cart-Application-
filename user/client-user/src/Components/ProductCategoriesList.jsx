@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCategoriesList = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategory, setExpandedCategory] = useState(null);
     const [subCategories, setSubCategories] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCategories();
@@ -53,7 +56,13 @@ const ProductCategoriesList = () => {
                                 <ul className="mt-2 pl-2 text-gray-700">
                                     {subCategories[category.p_id]?.length > 0 ? (
                                         subCategories[category.p_id].map((sub) => (
-                                            <li key={sub.sub_p_id}>{sub.sub_p_name}</li>
+                                            <li 
+                                            key={sub.sub_p_id}
+                                            className="text-sm text-gray-700 hover:text-blue-500 cursor-pointer"
+                                            onClick={() => navigate(`/subProductCategories/${sub.sub_p_id}/product-items`)}
+                                            >
+                                            {sub.sub_p_name}
+                                            </li>
                                         ))
                                     ) : (
                                         <li className="text-gray-500">No subcategories</li>
