@@ -1,17 +1,28 @@
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaSearch, FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import Auth from "./Auth";
 import { useState } from "react";
+import CategoryList from "./CategoryList";
 
 const TopBar = () => {
     const [showAuth, setShowAuth] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-
+    const [showSidebar, setShowSidebar] = useState(false);
 
     return (
         <>
             <div className="w-full bg-blue-600 text-white flex items-center justify-between px-6 py-3">
+                {/* side bar */}
+                <div className="flex items-center gap-4">
+                    <button
+                    onClick={() => setShowSidebar(true)}
+                    className="text-white text-xl focus:outline-none"
+                    >
+                        <FaBars />
+                    </button>
+                
                 {/* Logo */}
                 <h1 className="text-2xl font-bold">E-Cart</h1>
+                </div>
 
                 {/* Search Bar with Categories */}
                 <div className="flex items-center bg-white rounded-md shadow-md overflow-hidden relative w-[500px] max-w-full">
@@ -34,6 +45,36 @@ const TopBar = () => {
                 {/* User Authentication Icon */}
                 <FaUserCircle size={30} onClick={() => setShowAuth(true)} className="cursor-pointer" />
             </div>
+
+            {/* Sidebar (CategoryList) */}
+            <div
+            className={
+                `fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform duration-300
+                ${showSidebar ? "translate-x-0" : "-translate-x-full"
+
+                }`
+            }
+            >
+                {/* Close Button */}
+                <div className="flex justify-end p-3">
+                    <button
+                        onClick={() => setShowSidebar(false)}
+                        className="text-gray-700 text-xl"
+                    >
+                        <FaTimes />
+                    </button>
+                </div>
+                <CategoryList />
+            </div>
+
+            {/* Overlay when sidebar is open */}
+            {showSidebar && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-40 z-30"
+                    onClick={() => setShowSidebar(false)}
+                ></div>
+            )}
+
 
             {/* Signup Modal */}
             {showAuth && (
