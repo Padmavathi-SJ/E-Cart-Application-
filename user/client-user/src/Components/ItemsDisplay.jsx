@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import TopBar from "./TopBar";
 
 const ItemsDisplay = () => {
     const { sub_id } = useParams(); // Get subcategory ID from URL
@@ -36,6 +37,8 @@ const ItemsDisplay = () => {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
+        <>
+        <TopBar />
         <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold text-center mb-6">Items</h2>
             {items.length === 0 ? (
@@ -56,6 +59,7 @@ const ItemsDisplay = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 
