@@ -39,8 +39,8 @@ function Auth() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100">
-            <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
+        <div>
+            <div>
                 <h2 className="text-2xl font-semibold text-center mb-6">{isLogin ? "Login" : "Register"}</h2>
                 
                 {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
