@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import TopBar from "./TopBar";
+import ProductCategoriesList from "./ProductCategoriesList";
 
 
 const ItemsDisplay = () => {
@@ -33,15 +35,31 @@ const ItemsDisplay = () => {
     }, [sub_p_id]);
     
 
+    /*
     if (loading) return <p className="text-center text-gray-500">Loading items...</p>;
     if (error) return <p className="text-center text-red-500">{error}</p>;
+    */
 
     return (
-        <div className="container mx-auto p-4">
+        <>
+        <TopBar />
+        
+        <div className="container mx-auto px-4 py-6">
             <h2 className="text-2xl font-bold text-center mb-6">Items</h2>
-            {items.length === 0 ? (
-                <p className="text-center text-gray-500">No items available.</p>
-            ) : (
+
+            <div className="flex flex-col md:flex-row gap-6 min-h-[600px]">
+            {/* Sidebar - Left */}
+            <div className="md:w-1/4 w-full  h-full">
+                        <ProductCategoriesList />
+                    </div>
+                    <div className="md:w-3/4 w-full  h-full">
+           {loading ? (
+                            <p className="text-center text-gray-500">Loading items...</p>
+                        ) : error ? (
+                            <p className="text-center text-red-500">{error}</p>
+                        ) : items.length === 0 ? (
+                            <p className="text-center text-gray-500">No items available.</p>
+                        ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {items.map((item) => (
                         <div key={item.item_id} className="bg-white shadow-md rounded-lg p-4">
@@ -56,7 +74,10 @@ const ItemsDisplay = () => {
                     ))}
                 </div>
             )}
+            </div>
+            </div>
         </div>
+        </>
     );
 };
 
