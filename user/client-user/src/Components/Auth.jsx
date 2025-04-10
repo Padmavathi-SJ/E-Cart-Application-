@@ -12,77 +12,92 @@ function Auth() {
 
     const handleSubmit = async () => {
         setError(""); // Clear previous errors
-
+    
         if (!email || !password || (!isLogin && !name)) {
             setError("All fields are required.");
             return;
         }
-
+    
         try {
             if (isLogin) {
-                const { data } = await axios.post("http://localhost:5000/auth/login", { email, password });
-                alert(data.message);
-                localStorage.setItem("token", data.token);
-                navigate("/"); // Navigate to Home
+                const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+    
+                console.log("Login response:", res.data); // ✅ Debug
+                localStorage.setItem("token", res.data.token);
+                alert(res.data.message); // ✅ Fix used here
+                navigate("/");
+    
             } else {
-                const { data } = await axios.post("http://localhost:5000/auth/register", { name, email, password });
-                alert(data.message);
-                setIsLogin(true); // Stay on login page after registration
+                const res = await axios.post("http://localhost:5000/auth/register", { name, email, password });
+    
+                console.log("Register response:", res.data); // ✅ Debug
+                alert(res.data.message);
+                setIsLogin(true);
             }
         } catch (error) {
+            console.error("Auth error:", error); // ✅ Log error for developer
+    
             if (error.response) {
-                setError(error.response.data.error || "Something went wrong.");
+                const errMsg = error.response.data.error || "Something went wrong.";
+                setError(errMsg);
+                alert(errMsg);
             } else {
                 setError("Server error. Please try again later.");
+                alert("Server error. Please try again later.");
             }
         }
     };
+    
 
-    return (
+   return (
         <div>
             <div>
-                <h2 className="text-2xl font-semibold text-center mb-6">{isLogin ? "Login" : "Register"}</h2>
-                
-                {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
-                
+                <h2 className="text-2xl font-bold text-center mb-6">
+                    {isLogin ? "Login" : "Register"}
+                </h2>
+
+                {error && (
+                    <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+                )}
+
                 {!isLogin && (
-                    <input 
+                    <input
                         type="text"
                         placeholder="Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-3"
+                        className="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:ring-2 focus:ring-blue-500"
                     />
                 )}
 
-                <input 
+                <input
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-3"
+                    className="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:ring-2 focus:ring-blue-500"
                 />
 
-                <input 
+                <input
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-4"
+                    className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500"
                 />
 
-                <button 
-                    onClick={handleSubmit} 
-                    className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
+                <button
+                    onClick={handleSubmit}
+                    className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
                 >
                     {isLogin ? "Login" : "Register"}
                 </button>
 
-                <p 
+                <p
                     onClick={() => setIsLogin(!isLogin)}
-                    className="text-center text-sm text-blue-500 mt-4 cursor-pointer hover:underline"
+                    className="text-center text-blue-500 mt-4 text-sm cursor-pointer hover:underline"
                 >
-                    {isLogin ? "New user? Register here" : "Already registered? Login here"}
+                    {isLogin ? "New user? Register here" : "Already have an account? Login here"}
                 </p>
             </div>
         </div>
