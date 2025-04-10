@@ -1,27 +1,25 @@
-import {db} from '../config/db.js';
+import { db } from "../config/db.js";
 
+// Create a new user
 export const createUser = async (name, email, password) => {
     const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    
-    db.query(sql, [name, email, password], (err, result) => {
-        if (err) {
-            console.error("MySQL Insert Error:", err);
-            return callback(err, null);
-        }
-        callback(null, result);
-    });
+    try {
+        const [result] = await db.query(sql, [name, email, password]);
+        return result;
+    } catch (error) {
+        console.error("MySQL Insert Error:", error);
+        throw error;
+    }
 };
 
-
-export const findUserByEmail = (email, callback) => {
-    const sql = "SELECT * FROM users WHERE email = ?";  // ✅ Corrected Query
-
-    db.query(sql, [email], (err, results) => {
-        if (err) {
-            console.error("MySQL Query Error:", err);
-            return callback(err, null);
-        }
-        callback(null, results);
-    });
+// Find user by email
+export const findUserByEmail = async (email) => {
+    const sql = "SELECT * FROM users WHERE email = ?";
+    try {
+        const [rows] = await db.query(sql, [email]);
+        return rows[0]; // return first user if exists
+    } catch (error) {
+        console.error("MySQL Query Error:", error);
+        throw error;
+    }
 };
-

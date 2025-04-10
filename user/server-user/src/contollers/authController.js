@@ -1,11 +1,13 @@
-import {db} from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
 import { createUser, findUserByEmail } from "../models/userModel.js";
 
+dotenv.config();
 
-export const register = (req, res) => {
+export const registerUser = (req, res) => {
     const { name, email, password } = req.body;
+    console.log("Registered user: ", {name, email});
 
     if (!name || !email || !password) {
         return res.status(400).json({ error: "All fields are required" });
