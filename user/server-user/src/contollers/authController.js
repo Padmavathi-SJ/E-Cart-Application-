@@ -5,53 +5,58 @@ import { createUser, findUserByEmail } from "../models/userModel.js";
 
 dotenv.config();
 
-export const registerUser = (req, res) => {
+export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     console.log("Registered user: ", {name, email});
 
-    if (!name || !email || !password) {
-        return res.status(400).json({ error: "All fields are required" });
-    }
-
-    const hashedPassword = bcrypt.hashSync(password, 10);
-
-    // Check if user already exists
-    findUserByEmail(email, (err, result) => {
-        if (err) return res.status(500).json({ error: "Database error" });
-
-        if (result.length > 0) {
-            return res.status(400).json({ error: "User already exists" });
+   try {
+        const existing = await findUserByEmail(email);
+        if(existing.length > 0){
+            console.log("user already exist with email: ", email);
+            return res.status(400).json({error: "user already exists"});
         }
 
-        // Register new user
-        createUser(name, email, hashedPassword, (err, result) => {
-            if (err) return res.status(500).json({ error: "Database error during registration" });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await createUser(name, email, hashedPassword);
 
-            res.json({ message: "User registered successfully" });
-        });
-    });
+        console.log("user registered sucessfully: ", {name, email});
+        res.status(201).json({message: "User registered successfully"});
+    } catch (error) {
+        console.log("Registration failed: ", error.message);
+        res.status(500).json({error: "Internal server error"});
+    }
 };
 
 
-export const login = (req, res) => {
+export const loginUser = async (req, res) => {
     const { email, password } = req.body;
+    console.log("Login attempt for email: ", email);
 
-    if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required" });
+   try{
+    const users = await findUserByEmail(email);
+   
+
+    if(!users || users.length === 0) {
+        console.log("user not found for email: ", email);
+        return res.status(404).json({ error: "User not found "});
     }
 
-    findUserByEmail(email, (err, result) => {
-        if (err) return res.status(500).json({ error: "Database error" });
+    const user = users[0];
+    const isMatch = await bcrypt.compare(password, user.password);
 
-        if (result.length === 0) return res.status(401).json({ error: "User not found" });
+    if(!isMatch) {
+        console.log("Invalid credentials for: ", email);
+        return res.status(401).json({error: "Invalid credentials"});
+    }
 
-        const user = result[0];
-        const isMatch = bcrypt.compareSync(password, user.password);
-
-        if (!isMatch) return res.status(401).json({ error: "Incorrect password" });
-
-        const token = jwt.sign({ id: user.id }, "secretkey", { expiresIn: "1h" });
-
-        res.json({ message: "Login successful", token });
+    const token=jwt.sign({ id: user.id, email: user.email }, process.env.secretkey, { 
+        expiresIn: '1h'
     });
+    console.log("User logged in successfully: ", {name: user.name, email: user.email});
+    res.status(200).json({ token, name: user.name, message: "Login successful" });
+
+   } catch(error) {
+    console.log("Login failed: ", error.message);
+    res.status(500).json({ error: "Inernal Server Error "});
+   }
 };

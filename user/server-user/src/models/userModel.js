@@ -17,9 +17,9 @@ export const findUserByEmail = async (email) => {
     const sql = "SELECT * FROM users WHERE email = ?";
     try {
         const [rows] = await db.query(sql, [email]);
-        return rows[0]; // return first user if exists
+        return rows; // return first user if exists
     } catch (error) {
-        console.error("MySQL Query Error:", error);
+        console.error("Error in findUserByEmail:", error);
         throw error;
     }
 };
