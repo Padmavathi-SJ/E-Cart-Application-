@@ -1,12 +1,19 @@
 import { FaSearch, FaUserCircle, FaTimes } from "react-icons/fa";
 import Auth from "./Auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CategoryList from "./CategoryList";
 
 const TopBar = () => {
     const [showAuth, setShowAuth] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [showSidebar, setShowSidebar] = useState(false);
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        const storedName = localStorage.getItem("name");
+        setUsername(storedName || "");
+      
+    }, [showAuth]);
 
     return (
         <>
@@ -29,11 +36,10 @@ const TopBar = () => {
                 </div>
 
                 {/* Auth Icon */}
-                <FaUserCircle
-                    size={30}
-                    onClick={() => setShowAuth(true)}
-                    className="cursor-pointer"
-                />
+                <div className="flex flex-col items-center cursor-pointer" onClick={() => setShowAuth(true)}>
+                    <FaUserCircle size={30} />
+                    {username && <span className="text-sm mt-1">{username}</span>}
+                </div>
             </div>
 
             {/* Sidebar - only visible in TopBar */}
@@ -66,7 +72,10 @@ const TopBar = () => {
                         >
                             ✖
                         </button>
-                        <Auth />
+                        <Auth 
+                        onLoginSuccess={(name) => setUsername(name)}
+                        closeModal={() => setShowAuth(false)}
+                        />
                     </div>
                 </div>
             )}

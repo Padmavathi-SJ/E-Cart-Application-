@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Auth() {
+function Auth({ onLoginSuccess, closeModal }) {
     const [isLogin, setIsLogin] = useState(true);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -24,7 +24,11 @@ function Auth() {
     
                 console.log("Login response:", res.data); // ✅ Debug
                 localStorage.setItem("token", res.data.token);
+                localStorage.setItem("name", res.data.name);
                 alert(res.data.message); // ✅ Fix used here
+
+                if(onLoginSuccess) onLoginSuccess(res.data.name);
+                if(closeModal) closeModal();
                 navigate("/");
     
             } else {
