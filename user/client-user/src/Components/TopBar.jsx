@@ -1,68 +1,73 @@
-import { FaSearch, FaUserCircle, FaTimes } from "react-icons/fa";
+import { FaSearch, FaUserCircle, FaTimes, FaBars } from "react-icons/fa";
 import Auth from "./Auth";
-import { useState, useEffect } from "react";
 import CategoryList from "./CategoryList";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
     const [showAuth, setShowAuth] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [showSidebar, setShowSidebar] = useState(false);
+    const [showCategory, setShowCategory] = useState(false);
     const [username, setUsername] = useState("");
+    const categoryRef = useRef(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedName = localStorage.getItem("name");
         setUsername(storedName || "");
-      
     }, [showAuth]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if(categoryRef.current &&
+                !categoryRef.current.contains(event.target) &&
+                !event.target.closest("#category-toggle")
+            ) {
+                setShowCategory(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
         <>
-            <div className="w-full bg-blue-600 text-white flex items-center justify-between px-6 py-3 z-20 relative">
+        <div className="w-full bg-blue-600 text-white flex items-center justify-between px-6 py-3 z-20 relative">
+            {/* Left Side: Logo, Menu Toggle, CategoryList */}
+            <div className="flex items-center gap-4">
                 {/* Logo */}
-                <h1 className="text-2xl font-bold">E-Cart</h1>
+                <h1 
+                className="text-2xl font-bold cursor-pointer"
+                onClick={() => navigate("/")}
+                >E-Cart</h1>
 
-                {/* Search */}
-                <div className="flex items-center bg-white rounded-md shadow-md overflow-hidden relative w-[500px] max-w-full">
-                    <input
-                        type="text"
-                        placeholder="Search for products..."
-                        className="px-4 py-2 w-full border-l border-gray-300 focus:outline-none text-gray-700"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600">
-                        <FaSearch />
-                    </button>
+                {/* Toggle Icon */}
+                <FaBars
+                    size={22}
+                    className="cursor-pointer hover:text-gray-300"
+                    onClick={() => setShowCategory((prev) => !prev)}
+                />
                 </div>
+            
 
-                {/* Auth Icon */}
-                <div className="flex flex-col items-center cursor-pointer" onClick={() => setShowAuth(true)}>
-                    <FaUserCircle size={30} />
-                    {username && <span className="text-sm mt-1">{username}</span>}
-                </div>
+            {/* Right Side: Auth Icon */}
+            <div className="flex flex-col items-center cursor-pointer" onClick={() => setShowAuth(true)}>
+                <FaUserCircle size={30} />
+                {username && <span className="text-sm mt-1">{username}</span>}
             </div>
 
-            {/* Sidebar - only visible in TopBar */}
-            {showSidebar && (
-                <>
-                    <div className="fixed inset-0 flex z-40">
-                        <div className="w-64 bg-white shadow-lg h-full">
-                            <div className="flex justify-end p-3">
-                                <button onClick={() => setShowSidebar(false)}>
-                                    <FaTimes />
-                                </button>
-                            </div>
-                            <CategoryList />
-                        </div>
-                        <div
-                            className="flex-1 bg-black bg-opacity-40"
-                            onClick={() => setShowSidebar(false)}
-                        />
-                    </div>
-                </>
+            </div>
+
+            {showCategory && (
+                <div
+                ref={categoryRef}
+                className="absolute left-6 top-[60px] z-40 bg-white shadow-lg border rounded-md"
+                >
+                    <CategoryList />
+                </div>
             )}
 
-            {/* Signup/Login Modal */}
+            {/* Auth Modal */}
             {showAuth && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
@@ -72,9 +77,9 @@ const TopBar = () => {
                         >
                             ✖
                         </button>
-                        <Auth 
-                        onLoginSuccess={(name) => setUsername(name)}
-                        closeModal={() => setShowAuth(false)}
+                        <Auth
+                            onLoginSuccess={(name) => setUsername(name)}
+                            closeModal={() => setShowAuth(false)}
                         />
                     </div>
                 </div>
