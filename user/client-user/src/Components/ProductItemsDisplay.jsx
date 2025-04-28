@@ -1,11 +1,12 @@
+// components/ProductItemsDisplay.js
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import TopBar from "./TopBar";
 import ProductCategoriesList from "./ProductCategoriesList";
-
+import api from "../services/api"; // Import the api instance
 
 const ItemsDisplay = () => {
-    const { sub_p_id } = useParams(); // Get subcategory ID from URL
+    const { sub_p_id } = useParams();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,19 +14,25 @@ const ItemsDisplay = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/productItems/subProductCategories/${sub_p_id}/product-items`);
-                const data = await response.json();
-                console.log("API Response:", data);  // ✅ Debug log
+                const response = await api.get(`/productItems/subProductCategories/${sub_p_id}/product-items`);
+                const data = response.data;
+                console.log("API Response:", data);
         
                 if (data.success) {
-                    console.log("Fetched Items:", data.items);  // ✅ Log items list
+                    console.log("Fetched Items:", data.items);
                     setItems(data.items);
                 } else {
                     setError("No items found for this subcategory.");
                 }
             } catch (err) {
                 console.error("Error fetching items:", err);
-                setError("Error fetching items.");
+                if (err.response?.status === 401) {
+                    setError("Please login to view items");
+                    // Optionally redirect to login:
+                    // navigate('/login');
+                } else {
+                    setError("Error fetching items. Please try again.");
+                }
             } finally {
                 setLoading(false);
             }
@@ -33,12 +40,6 @@ const ItemsDisplay = () => {
     
         fetchItems();
     }, [sub_p_id]);
-    
-
-    /*
-    if (loading) return <p className="text-center text-gray-500">Loading items...</p>;
-    if (error) return <p className="text-center text-red-500">{error}</p>;
-    */
 
     return (
         <>

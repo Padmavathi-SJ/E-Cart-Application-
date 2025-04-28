@@ -1,7 +1,9 @@
+// components/ItemsDisplay.js
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import TopBar from "./TopBar";
 import ProductCategoriesList from "./ProductCategoriesList";
+import api from "../services/api"; // Import the api instance
 
 const ItemsDisplay = () => {
     const { sub_id } = useParams();
@@ -12,8 +14,8 @@ const ItemsDisplay = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/items/subcategories/${sub_id}/items`);
-                const data = await response.json();
+                const response = await api.get(`/items/subcategories/${sub_id}/items`);
+                const data = response.data;
                 if (data.success) {
                     setItems(data.items);
                 } else {
@@ -21,13 +23,20 @@ const ItemsDisplay = () => {
                 }
             } catch (err) {
                 console.error("Error fetching items:", err);
-                setError("Error fetching items.");
+                if (err.response?.status === 401) {
+                    setError("Please login to view items");
+                    // Optionally redirect to login:
+                    // navigate('/login');
+                } else {
+                    setError("Error fetching items. Please try again.");
+                }
             } finally {
                 setLoading(false);
             }
         };
         fetchItems();
     }, [sub_id]);
+
 
     return (
         <>

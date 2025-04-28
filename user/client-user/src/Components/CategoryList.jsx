@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
+import api from "../services/api"; // Use the api instance instead of axios directly
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
@@ -12,9 +11,14 @@ const CategoryList = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/category/categories");
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error("No authentication token found");
+                }
 
-                console.log("Fetched Data:", response.data); // Log data in console
+                const response = await api.get("/category/categories");
+                
+                console.log("Fetched Data:", response.data);
 
                 if (response.data && response.data.success && Array.isArray(response.data.categories)) {
                     setCategories(response.data.categories);
@@ -24,7 +28,26 @@ const CategoryList = () => {
                 }
             } catch (error) {
                 console.error("Error fetching categories:", error);
-                setError("Failed to load categories.");
+                
+                // Handle different error cases
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        setError("Please login to view categories");
+                        // Optional: redirect to login
+                        // navigate('/login');
+                    } else if (error.response.status === 403) {
+                        setError("Session expired. Please login again");
+                        // Clear invalid token
+                        localStorage.removeItem('token');
+                    } else {
+                        setError("Failed to load categories");
+                    }
+                } else if (error.message === "No authentication token found") {
+                    setError("Please login to view categories");
+                } else {
+                    setError("Network error. Please try again later");
+                }
+                
                 setCategories([]);
             } finally {
                 setLoading(false);

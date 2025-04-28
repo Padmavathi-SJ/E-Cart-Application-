@@ -10,47 +10,45 @@ function Auth({ onLoginSuccess, closeModal }) {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = async () => {
-        setError(""); // Clear previous errors
-    
-        if (!email || !password || (!isLogin && !name)) {
-            setError("All fields are required.");
-            return;
-        }
-    
-        try {
-            if (isLogin) {
-                const res = await axios.post("http://localhost:5000/auth/login", { email, password });
-    
-                console.log("Login response:", res.data); // ✅ Debug
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("name", res.data.name);
-                alert(res.data.message); // ✅ Fix used here
 
-                if(onLoginSuccess) onLoginSuccess(res.data.name);
-                if(closeModal) closeModal();
-                navigate("/");
-    
-            } else {
-                const res = await axios.post("http://localhost:5000/auth/register", { name, email, password });
-    
-                console.log("Register response:", res.data); // ✅ Debug
-                alert(res.data.message);
-                setIsLogin(true);
-            }
-        } catch (error) {
-            console.error("Auth error:", error); // ✅ Log error for developer
-    
-            if (error.response) {
-                const errMsg = error.response.data.error || "Something went wrong.";
-                setError(errMsg);
-                alert(errMsg);
-            } else {
-                setError("Server error. Please try again later.");
-                alert("Server error. Please try again later.");
-            }
+const handleSubmit = async () => {
+    setError(""); // Clear previous errors
+
+    if (!email || !password || (!isLogin && !name)) {
+        setError("All fields are required.");
+        return;
+    }
+
+    try {
+        if (isLogin) {
+            const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+            
+            console.log("Login response:", res.data);
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("name", res.data.name);
+            alert(res.data.message);
+
+            if(onLoginSuccess) onLoginSuccess(res.data.name);
+            if(closeModal) closeModal();
+            navigate("/");
+        } else {
+            const res = await axios.post("http://localhost:5000/auth/register", { name, email, password });
+            
+            console.log("Register response:", res.data);
+            alert(res.data.message);
+            setIsLogin(true);
         }
-    };
+    } catch (error) {
+        console.error("Auth error:", error);
+        if (error.response) {
+            setError(error.response.data.error || "Something went wrong.");
+            alert(error.response.data.error || "Something went wrong.");
+        } else {
+            setError("Server error. Please try again later.");
+            alert("Server error. Please try again later.");
+        }
+    }
+};
     
 
    return (

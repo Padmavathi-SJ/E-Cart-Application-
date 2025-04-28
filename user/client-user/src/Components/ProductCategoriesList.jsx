@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api"; // Import the api instance
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const ProductCategoriesList = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategory, setExpandedCategory] = useState(null);
     const [subCategories, setSubCategories] = useState({});
-
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,17 +16,22 @@ const ProductCategoriesList = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/products/product-categories");
+            const response = await api.get("/products/product-categories");
             setCategories(response.data.productCategories || []);
         } catch (error) {
             console.error("Error fetching product categories:", error);
+            if (error.response?.status === 401) {
+                setError("Please login to view categories");
+            } else {
+                setError("Error loading categories");
+            }
         }
     };
 
     const fetchSubCategories = async (p_id) => {
         if (subCategories[p_id]) return;
         try {
-            const response = await axios.get(`http://localhost:5000/products/product-categories/${p_id}/sub-products`);
+            const response = await api.get(`/products/product-categories/${p_id}/sub-products`);
             setSubCategories(prev => ({ ...prev, [p_id]: response.data.subProducts || [] }));
         } catch (error) {
             console.error("Error fetching subcategories:", error);
